@@ -72,6 +72,8 @@ export class GoogleApisService {
 
     try {
       const rows = await firstSheet.getRows();
+
+      // !! Row Name in the spreadsheet must remain as Stock Symbol !!
       const stockSymbols = rows.map<string>(
         (row: RCZPortfolioGoogleSheetRow) => row['Stock Symbol'],
       );
