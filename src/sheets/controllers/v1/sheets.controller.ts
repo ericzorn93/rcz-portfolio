@@ -1,4 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+
+import { GoogleApisService } from 'src/sheets/services/google-apis.service';
 
 @Controller('v1/sheets')
-export class SheetsController {}
+export class SheetsController {
+  constructor(private readonly googleApisService: GoogleApisService) {}
+
+  @Get('')
+  public async getSheet(): Promise<void> {
+    return this.googleApisService.getSheet();
+  }
+}
