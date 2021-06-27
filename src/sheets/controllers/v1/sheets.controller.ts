@@ -7,7 +7,7 @@ export class SheetsController {
   constructor(private readonly googleApisService: GoogleApisService) {}
 
   @Get('')
-  public async getSheet(): Promise<void> {
-    return this.googleApisService.getSheet();
+  public async getStockSymbols(): Promise<string[]> {
+    return this.googleApisService.getStockSymbols();
   }
 }
