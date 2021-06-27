@@ -1,13 +1,15 @@
 // TD Ameritrade Unity
-export type TDAmeritradeStock =
-  | TDAmeritradeMutualFund
-  | TDAmeritradeFuture
-  | TDAmeritradeFutureOptions
-  | TDAmeritradeIndex
-  | TDAmeritradeOption
-  | TDAmeritradeForex
-  | TDAmeritradeETF
-  | TDAmeritradeEquity;
+export interface TDAmeritradeStock {
+  [key: string]:
+    | TDAmeritradeMutualFund
+    | TDAmeritradeFuture
+    | TDAmeritradeFutureOptions
+    | TDAmeritradeIndex
+    | TDAmeritradeOption
+    | TDAmeritradeForex
+    | TDAmeritradeETF
+    | TDAmeritradeEquity;
+}
 
 //Mutual Fund:
 export class TDAmeritradeMutualFund {

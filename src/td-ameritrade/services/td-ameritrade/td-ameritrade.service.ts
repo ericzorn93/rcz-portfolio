@@ -24,10 +24,10 @@ export class TdAmeritradeService {
    */
   public async getStockQuotes(
     stockSymbols: string[],
-  ): Promise<TDAmeritradeStock[]> {
-    // Return empty array in the event of a non-symbol array or nullish value
+  ): Promise<TDAmeritradeStock> {
+    // Return empty object in the event of a non-symbol array or nullish value
     if (!Array.isArray(stockSymbols)) {
-      return [];
+      return {};
     }
 
     // Create a single string of all symbols combined in lowercase format
@@ -37,7 +37,7 @@ export class TdAmeritradeService {
 
     try {
       const { data } = await this.httpService
-        .get<TDAmeritradeStock[]>('/marketdata/quotes', {
+        .get<TDAmeritradeStock>('/marketdata/quotes', {
           params: {
             symbol: joinedStockSymbols,
           },

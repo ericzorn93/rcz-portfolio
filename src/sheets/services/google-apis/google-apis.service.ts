@@ -5,7 +5,6 @@ import { GoogleSpreadsheet, GoogleSpreadsheetRow } from 'google-spreadsheet';
 
 import { SheetsRowResponse } from '../../dto/sheets.row.response';
 import { TdAmeritradeService } from 'src/td-ameritrade/services/td-ameritrade/td-ameritrade.service';
-import { TDAmeritradeStock } from 'src/td-ameritrade/dto/td-ameritrade.response';
 
 type RCZPortfolioGoogleSheetRow = GoogleSpreadsheetRow & SheetsRowResponse;
 
@@ -18,17 +17,47 @@ export class GoogleApisService {
     private readonly tdAmeritradeService: TdAmeritradeService,
   ) {}
 
-  public async getStockData(): Promise<TDAmeritradeStock[]> {
+  /**
+   * Obtains all stock data from the combines services of TD Ameritrade and CEF Connect
+   *
+   * @return {*}
+   * @memberof GoogleApisService
+   */
+  public async getStockData() {
     const symbols = await this.getStockSymbols();
-    const data = await this.tdAmeritradeService.getStockQuotes(symbols);
-    return data;
+    const tdAmeritradeData = await this.tdAmeritradeService.getStockQuotes(
+      symbols,
+    );
+    const finalData = symbols.map(symbol => {
+      const stockData = tdAmeritradeData[symbol];
+
+      // Do not update stock data for symbols that don't exist
+      if (!stockData) return null;
+
+      // Get Stock Data from TD Ameritrade
+      const sharePrice = (stockData as any).lastPrice;
+      const dividendAmount = (stockData as any).divAmount;
+
+      return {
+        symbol,
+        sharePrice: `$${sharePrice}`,
+        estimatedIncome: `$${dividendAmount}`,
+      };
+    });
+
+    // Filter out all falsy/null values
+    const nonNullStocks = finalData.filter(stock => stock != null);
+
+    return nonNullStocks.map(stock => ({
+      [stock.symbol]: true,
+    }));
   }
 
   /**
    * Obtains all stock symbols from the
    * Excel Spreadsheet
    *
-   * @return {*}  {Promise<string[]>}
+   * @return {Promise<string[]>}  {Promise<string[]>}
    * @memberof GoogleApisService
    */
   public async getStockSymbols(): Promise<string[]> {
@@ -60,7 +89,8 @@ export class GoogleApisService {
       );
     }
 
-    return symbols;
+    // Remove duplicates
+    return Array.from(new Set(symbols));
   }
 
   /**

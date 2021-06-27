@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Patch } from '@nestjs/common';
 import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
@@ -13,7 +13,8 @@ export class SheetsController {
   constructor(private readonly googleApisService: GoogleApisService) {}
 
   @ApiOkResponse({
-    type: () => [String],
+    type: 'string',
+    isArray: true,
     description: 'All stock symbols from Google Sheet',
   })
   @ApiInternalServerErrorResponse({
@@ -24,8 +25,15 @@ export class SheetsController {
     return this.googleApisService.getStockSymbols();
   }
 
-  @Get('stock-data')
-  public async getStockData() {
-    return this.googleApisService.getStockData();
+  @ApiOkResponse({
+    type: 'boolean',
+    description:
+      'Fetches the updated stock data from the TD Ameritrade API and updates the spreadsheet, based on the symbols provided in the column of the sheet.',
+  })
+  @Patch('update-stock-data')
+  public async getStockData(): Promise<{ [key: string]: boolean }[]> {
+    const data = await this.googleApisService.getStockData();
+
+    return data;
   }
 }
