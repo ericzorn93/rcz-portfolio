@@ -111,6 +111,7 @@ export class GoogleApisService {
       'GOOGLE_RCZ_PORTFOLIO_SPREADSHEET_ID',
     );
 
+    // Google Spreadsheet instance based off of spreadsheet ID
     const doc = new GoogleSpreadsheet(spreadsheetId);
 
     try {
