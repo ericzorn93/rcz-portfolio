@@ -25,8 +25,10 @@ export class GoogleApisService {
 
     try {
       const rows = await firstSheet.getRows();
-      symbols = rows
-        .map(row => row['Stock Symbol'])
+      const stockSymbols = rows.map(row => row['Stock Symbol']);
+
+      // Filter out non-string and empty string values and then uppercase all symbols
+      symbols = stockSymbols
         .filter(
           symbol =>
             symbol != null &&
@@ -40,6 +42,8 @@ export class GoogleApisService {
         'Had trouble grabbing rows with title Stock Symbol',
       );
     }
+
+    console.log(symbols.join(','));
 
     return symbols;
   }
