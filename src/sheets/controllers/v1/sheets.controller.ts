@@ -5,7 +5,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { GoogleApisService } from 'src/sheets/services/google-apis.service';
+import { GoogleApisService } from 'src/sheets/services/google-apis/google-apis.service';
 
 @ApiTags('v1/sheets')
 @Controller('v1/sheets')
