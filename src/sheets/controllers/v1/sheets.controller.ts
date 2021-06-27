@@ -23,4 +23,9 @@ export class SheetsController {
   public async getStockSymbols(): Promise<string[]> {
     return this.googleApisService.getStockSymbols();
   }
+
+  @Get('stock-data')
+  public async getStockData() {
+    return this.googleApisService.getStockData();
+  }
 }
