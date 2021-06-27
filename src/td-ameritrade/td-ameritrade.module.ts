@@ -1,7 +1,6 @@
 import { Module, HttpModule } from '@nestjs/common';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 
-import { TdAmeritradeController } from './controllers/v1/td-ameritrade.controller';
 import { TdAmeritradeService } from './services/td-ameritrade/td-ameritrade.service';
 
 @Module({
@@ -25,7 +24,7 @@ import { TdAmeritradeService } from './services/td-ameritrade/td-ameritrade.serv
     }),
   ],
   providers: [TdAmeritradeService],
-  controllers: [TdAmeritradeController],
+  controllers: [],
   exports: [TdAmeritradeService],
 })
 export class TdAmeritradeModule {}
