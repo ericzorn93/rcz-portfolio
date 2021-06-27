@@ -5,6 +5,7 @@ import { GoogleSpreadsheet, GoogleSpreadsheetRow } from 'google-spreadsheet';
 
 import { SheetsRowResponse } from '../../dto/sheets.row.response';
 import { TdAmeritradeService } from 'src/td-ameritrade/services/td-ameritrade/td-ameritrade.service';
+import { UpdatedStockResponse } from 'src/sheets/dto/updated.stock.response';
 
 type RCZPortfolioGoogleSheetRow = GoogleSpreadsheetRow & SheetsRowResponse;
 
@@ -23,7 +24,7 @@ export class GoogleApisService {
    * @return {*}
    * @memberof GoogleApisService
    */
-  public async getStockData() {
+  public async getStockData(): Promise<UpdatedStockResponse[]> {
     const symbols = await this.getStockSymbols();
     const tdAmeritradeData = await this.tdAmeritradeService.getStockQuotes(
       symbols,
@@ -49,7 +50,9 @@ export class GoogleApisService {
     const nonNullStocks = finalData.filter(stock => stock != null);
 
     return nonNullStocks.map(stock => ({
-      [stock.symbol]: true,
+      symbol: stock.symbol,
+      isUpdated: true,
+      updatedTimestamp: new Date().toISOString(),
     }));
   }
 
