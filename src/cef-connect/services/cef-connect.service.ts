@@ -64,6 +64,9 @@ export class CefConnectService {
       fiftyTwoWeekLowDiscount: null,
       fiftyTwoWeekHighDiscount: null,
       fiftyTwoWeekAverageDiscount: null,
+      zScoreThreeMonth: null,
+      zScoreSixMonth: null,
+      zScoreOneYear: null,
       distributionFrequency: null,
     };
 
@@ -83,6 +86,9 @@ export class CefConnectService {
         currentStock.Discount52WkAvg,
         'percent',
       ),
+      zScoreThreeMonth: currentStock.ZScore3M,
+      zScoreSixMonth: currentStock.ZScore6M,
+      zScoreOneYear: currentStock.ZScore1Yr,
       distributionFrequency: currentStock.DistributionFrequency,
     });
 

@@ -74,5 +74,8 @@ export interface CEFConnectSheetData {
   fiftyTwoWeekLowDiscount: string | null;
   fiftyTwoWeekHighDiscount: string | null;
   fiftyTwoWeekAverageDiscount: string | null;
+  zScoreThreeMonth: number | null;
+  zScoreSixMonth: number | null;
+  zScoreOneYear: number | null;
   distributionFrequency: string | null;
 }

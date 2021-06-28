@@ -1,7 +1,12 @@
+import { FinalStockData } from './../../dto/final.stock';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GoogleSpreadsheet, GoogleSpreadsheetRow } from 'google-spreadsheet';
+import {
+  GoogleSpreadsheet,
+  GoogleSpreadsheetRow,
+  GoogleSpreadsheetWorksheet,
+} from 'google-spreadsheet';
 
 import { SheetsRowResponse } from '../../dto/sheets.row.response';
 import { TdAmeritradeService } from 'src/td-ameritrade/services/td-ameritrade/td-ameritrade.service';
@@ -9,6 +14,8 @@ import { UpdatedStockResponse } from 'src/sheets/dto/updated.stock.response';
 import { CefConnectService } from 'src/cef-connect/services/cef-connect.service';
 
 type RCZPortfolioGoogleSheetRow = GoogleSpreadsheetRow & SheetsRowResponse;
+
+const SYMBOL_KEY = 'Stock Symbol';
 
 @Injectable()
 export class GoogleApisService {
@@ -36,7 +43,7 @@ export class GoogleApisService {
     const cefConnectStocks = await this.cefConnectService.getClosedEndFundPricing();
 
     // Obtain the share price, dividend and discount amounts
-    const finalData = symbols.map(symbol => {
+    const finalData: FinalStockData[] = symbols.map(symbol => {
       const stockData = tdAmeritradeData[symbol];
 
       // Do not update stock data for symbols that don't exist
@@ -63,7 +70,8 @@ export class GoogleApisService {
     // Filter out all falsy/null values
     const nonNullStocks = finalData.filter(stock => stock != null);
 
-    console.log(nonNullStocks);
+    // Call Google API to save new cell data
+    await this.updateSheetCellsWithNewData(nonNullStocks);
 
     return nonNullStocks.map(stock => ({
       symbol: stock.symbol,
@@ -73,15 +81,54 @@ export class GoogleApisService {
   }
 
   /**
-   * Obtains all stock symbols from the
-   * Excel Spreadsheet
+   * Updates the google spreadsheet with the new data
+   *
+   * @private
+   * @param {FinalStockData[]} finalStocks
+   * @memberof GoogleApisService
+   */
+  private async updateSheetCellsWithNewData(finalStocks: FinalStockData[]) {
+    const firstSheet = await this.getFirstSheet();
+    const rows = await firstSheet.getRows();
+
+    // Update each table column/row
+    finalStocks.forEach(stock => {
+      const matchingRows = rows.filter(row => row[SYMBOL_KEY] === stock.symbol);
+
+      if (matchingRows.length) {
+        matchingRows.forEach(async row => {
+          row['Distriubtion Frequency'] = stock.distributionFrequency;
+          await row.save();
+        });
+      }
+    });
+  }
+
+  /**
+   * Obtains the first spreadhsset
+   * in the current Google Sheets document from the API
+   *
+   * @private
+   * @return {*}  {Promise<GoogleSpreadsheetWorksheet>}
+   * @memberof GoogleApisService
+   */
+  private async getFirstSheet(): Promise<GoogleSpreadsheetWorksheet> {
+    const doc = await this.getDoc();
+    const firstSheet = doc.sheetsByIndex[0];
+
+    return firstSheet;
+  }
+
+  /**
+   * Obtains all stock symbols from the first
+   * google Spreadsheet
    *
    * @return {Promise<string[]>}  {Promise<string[]>}
    * @memberof GoogleApisService
    */
   public async getStockSymbols(): Promise<string[]> {
-    const doc = await this.getDoc();
-    const firstSheet = doc.sheetsByIndex[0];
+    // First spreadsheet from google doc
+    const firstSheet = await this.getFirstSheet();
 
     // Stock ticker symbols
     let symbols: string[] = [];
@@ -91,7 +138,7 @@ export class GoogleApisService {
 
       // !! Row Name in the spreadsheet must remain as Stock Symbol !!
       const stockSymbols = rows.map<string>(
-        (row: RCZPortfolioGoogleSheetRow) => row['Stock Symbol'],
+        (row: RCZPortfolioGoogleSheetRow) => row[SYMBOL_KEY],
       );
 
       // Filter out non-string and empty string values and then uppercase all symbols
