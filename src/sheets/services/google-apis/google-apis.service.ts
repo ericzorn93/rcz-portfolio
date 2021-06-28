@@ -98,7 +98,10 @@ export class GoogleApisService {
       if (matchingRows.length) {
         matchingRows.forEach(async row => {
           row['Distriubtion Frequency'] = stock.distributionFrequency;
-          await row.save();
+          console.log(row['Distriubtion Frequency']);
+
+          // TODO: Save rows
+          // await row.save();
         });
       }
     });
