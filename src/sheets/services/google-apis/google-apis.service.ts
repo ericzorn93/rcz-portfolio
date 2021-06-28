@@ -36,7 +36,7 @@ export class GoogleApisService {
     const cefConnectStocks = await this.cefConnectService.getClosedEndFundPricing();
 
     // Obtain the share price, dividend and discount amounts
-    const symbolPromises = symbols.map(async symbol => {
+    const finalData = symbols.map(symbol => {
       const stockData = tdAmeritradeData[symbol];
 
       // Do not update stock data for symbols that don't exist
@@ -60,11 +60,10 @@ export class GoogleApisService {
       };
     });
 
-    // Wait for all requests
-    const finalData = await Promise.all(symbolPromises);
-
     // Filter out all falsy/null values
     const nonNullStocks = finalData.filter(stock => stock != null);
+
+    console.log(nonNullStocks);
 
     return nonNullStocks.map(stock => ({
       symbol: stock.symbol,

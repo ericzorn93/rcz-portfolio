@@ -59,7 +59,7 @@ export class CefConnectService {
     const currentStock = cefStocks[symbol];
 
     const closedEndFundData: CEFConnectSheetData = {
-      sharePrice: null,
+      cefSharePrice: null,
       currentDiscount: null,
       fiftyTwoWeekLowDiscount: null,
       fiftyTwoWeekHighDiscount: null,
@@ -72,7 +72,7 @@ export class CefConnectService {
     }
 
     const updatedClosedEndFundData = Object.assign(closedEndFundData, {
-      sharePrice: this.convertToLegibleAmount(currentStock.Price, 'dollar'),
+      cefSharePrice: this.convertToLegibleAmount(currentStock.Price, 'dollar'),
       currentDiscount: this.convertToLegibleAmount(
         currentStock.Discount,
         'percent',
@@ -86,7 +86,7 @@ export class CefConnectService {
       distributionFrequency: currentStock.DistributionFrequency,
     });
 
-    console.log(updatedClosedEndFundData);
+    return updatedClosedEndFundData;
   }
 
   /**

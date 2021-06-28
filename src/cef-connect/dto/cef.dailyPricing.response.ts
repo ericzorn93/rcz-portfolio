@@ -69,7 +69,7 @@ export class CEFDailyPrice {
 
 // Used for Google Sheet
 export interface CEFConnectSheetData {
-  sharePrice: string | null;
+  cefSharePrice: string | null;
   currentDiscount: string | null;
   fiftyTwoWeekLowDiscount: string | null;
   fiftyTwoWeekHighDiscount: string | null;
