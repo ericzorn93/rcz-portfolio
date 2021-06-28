@@ -32,7 +32,7 @@ export class GoogleApisService {
       symbols,
     );
 
-    await this.cefConnectService.getClosedEndFundPricing(symbols[0]);
+    await this.cefConnectService.getClosedEndFundPricing();
 
     // Obtain the share price, dividend and discount amounts
     const symbolPromises = symbols.map(async symbol => {
@@ -42,7 +42,7 @@ export class GoogleApisService {
       if (!stockData) return null;
 
       // Get CEF Connect Data
-      await this.cefConnectService.getClosedEndFundPricing(symbol);
+      // await this.cefConnectService.getClosedEndFundPricing(symbol);
 
       // Get Stock Data from TD Ameritrade
       const sharePrice = (stockData as any).lastPrice;

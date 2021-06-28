@@ -1,5 +1,5 @@
 import { HttpService, Injectable, Logger } from '@nestjs/common';
-import * as cheerio from 'cheerio';
+import { CEFDailyPrice } from '../dto/cef.dailyPricing.response';
 
 @Injectable()
 export class CefConnectService {
@@ -7,22 +7,25 @@ export class CefConnectService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  public async getClosedEndFundPricing(stockSymbol: string): Promise<any> {
+  /**
+   * Obtains all stock information from CEF Connect,
+   * specifically for closed end funds
+   *
+   * @return {*}  {Promise<CEFDailyPrice[]>}
+   * @memberof CefConnectService
+   */
+  public async getClosedEndFundPricing(): Promise<CEFDailyPrice[]> {
     try {
-      const { data: cefHtml } = await this.httpService
-        .get<string>(`/${stockSymbol}`, {
-          headers: {
-            accept: 'text/html',
-          },
-        })
+      const time = Date.now();
+
+      const { data: dailyPrices } = await this.httpService
+        .get<CEFDailyPrice[]>(`/DailyPricing?&_=${time}`)
         .toPromise();
 
-      const $ = cheerio.load(cefHtml);
-      const table = $('table.cefconnect-table-1').html();
-      console.log(table);
+      return dailyPrices;
     } catch (err) {
       this.logger.warn(
-        `date=${Date.now()} Error fetching stock symbol from CEF Connect and/or stock symbol ${stockSymbol} does not exist`,
+        `date=${Date.now()} Error fetching stock symbol list from CEF Connect`,
       );
       return null;
     }
