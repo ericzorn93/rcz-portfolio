@@ -66,3 +66,13 @@ export class CEFDailyPrice {
   InceptionDateUnixTimestamp: number;
   DistributionDate: string;
 }
+
+// Used for Google Sheet
+export interface CEFConnectSheetData {
+  sharePrice: string | null;
+  currentDiscount: string | null;
+  fiftyTwoWeekLowDiscount: string | null;
+  fiftyTwoWeekHighDiscount: string | null;
+  fiftyTwoWeekAverageDiscount: string | null;
+  distributionFrequency: string | null;
+}

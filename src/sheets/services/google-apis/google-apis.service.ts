@@ -32,7 +32,8 @@ export class GoogleApisService {
       symbols,
     );
 
-    await this.cefConnectService.getClosedEndFundPricing();
+    // Reach out to CEF Connect API to grab current pricing
+    const cefConnectStocks = await this.cefConnectService.getClosedEndFundPricing();
 
     // Obtain the share price, dividend and discount amounts
     const symbolPromises = symbols.map(async symbol => {
@@ -41,8 +42,11 @@ export class GoogleApisService {
       // Do not update stock data for symbols that don't exist
       if (!stockData) return null;
 
-      // Get CEF Connect Data
-      // await this.cefConnectService.getClosedEndFundPricing(symbol);
+      // Match CEF Connect Data
+      const cefConnectData = this.cefConnectService.getCefPriceForSheet(
+        symbol,
+        cefConnectStocks,
+      );
 
       // Get Stock Data from TD Ameritrade
       const sharePrice = (stockData as any).lastPrice;
@@ -52,6 +56,7 @@ export class GoogleApisService {
         symbol,
         sharePrice: `$${sharePrice}`,
         estimatedIncome: `$${dividendAmount}`,
+        ...cefConnectData,
       };
     });
 
