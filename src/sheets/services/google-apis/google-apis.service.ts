@@ -6,6 +6,7 @@ import { GoogleSpreadsheet, GoogleSpreadsheetRow } from 'google-spreadsheet';
 import { SheetsRowResponse } from '../../dto/sheets.row.response';
 import { TdAmeritradeService } from 'src/td-ameritrade/services/td-ameritrade/td-ameritrade.service';
 import { UpdatedStockResponse } from 'src/sheets/dto/updated.stock.response';
+import { CefConnectService } from 'src/cef-connect/services/cef-connect.service';
 
 type RCZPortfolioGoogleSheetRow = GoogleSpreadsheetRow & SheetsRowResponse;
 
@@ -16,6 +17,7 @@ export class GoogleApisService {
   constructor(
     private readonly configService: ConfigService,
     private readonly tdAmeritradeService: TdAmeritradeService,
+    private readonly cefConnectService: CefConnectService,
   ) {}
 
   /**
@@ -29,11 +31,18 @@ export class GoogleApisService {
     const tdAmeritradeData = await this.tdAmeritradeService.getStockQuotes(
       symbols,
     );
-    const finalData = symbols.map(symbol => {
+
+    await this.cefConnectService.getClosedEndFundPricing(symbols[0]);
+
+    // Obtain the share price, dividend and discount amounts
+    const symbolPromises = symbols.map(async symbol => {
       const stockData = tdAmeritradeData[symbol];
 
       // Do not update stock data for symbols that don't exist
       if (!stockData) return null;
+
+      // Get CEF Connect Data
+      await this.cefConnectService.getClosedEndFundPricing(symbol);
 
       // Get Stock Data from TD Ameritrade
       const sharePrice = (stockData as any).lastPrice;
@@ -45,6 +54,9 @@ export class GoogleApisService {
         estimatedIncome: `$${dividendAmount}`,
       };
     });
+
+    // Wait for all requests
+    const finalData = await Promise.all(symbolPromises);
 
     // Filter out all falsy/null values
     const nonNullStocks = finalData.filter(stock => stock != null);
