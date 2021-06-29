@@ -1,4 +1,3 @@
-import { FinalStockData } from './../../dto/final.stock';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -8,6 +7,7 @@ import {
   GoogleSpreadsheetWorksheet,
 } from 'google-spreadsheet';
 
+import { FinalStockData } from './../../dto/final.stock';
 import { SheetsRowResponse } from '../../dto/sheets.row.response';
 import { TdAmeritradeService } from 'src/td-ameritrade/services/td-ameritrade/td-ameritrade.service';
 import { UpdatedStockResponse } from 'src/sheets/dto/updated.stock.response';
@@ -56,7 +56,7 @@ export class GoogleApisService {
       );
 
       // Get Stock Data from TD Ameritrade
-      const sharePrice = (stockData as any).lastPrice;
+      const sharePrice = (stockData as any).lastPrice ?? 0;
       const dividendAmount = (stockData as any).divAmount;
 
       return {
@@ -90,9 +90,10 @@ export class GoogleApisService {
   private async updateSheetCellsWithNewData(finalStocks: FinalStockData[]) {
     const firstSheet = await this.getFirstSheet();
     const rows = await firstSheet.getRows();
+    const a1Ranges: string[] = [];
 
     // Update each table column/row
-    finalStocks.forEach(stock => {
+    finalStocks.forEach(async stock => {
       const matchingRows = rows.filter(row => row[SYMBOL_KEY] === stock.symbol);
 
       if (matchingRows.length) {
@@ -102,12 +103,14 @@ export class GoogleApisService {
           row['6 Month Z Score'] = stock.zScoreSixMonth;
           row['1 Year Z Score'] = stock.zScoreOneYear;
           row['Distriubtion Frequency'] = stock.distributionFrequency;
+          row['Share Price'] = stock.sharePrice;
+          await row.save();
+
+          // TODO: maybe remove
+          a1Ranges.push(row.a1Range);
         });
       }
     });
-
-    // TODO: Save sheet
-    await firstSheet.saveUpdatedCells();
   }
 
   /**
@@ -177,7 +180,7 @@ export class GoogleApisService {
    * @memberof GoogleApisService
    */
   private async getDoc(): Promise<GoogleSpreadsheet> {
-    const googleApiKey = this.configService.get<string>('GOOGLE_API_KEY');
+    // const googleApiKey = this.configService.get<string>('GOOGLE_API_KEY');
     const spreadsheetId = this.configService.get<string>(
       'GOOGLE_RCZ_PORTFOLIO_SPREADSHEET_ID',
     );
@@ -186,9 +189,13 @@ export class GoogleApisService {
     const doc = new GoogleSpreadsheet(spreadsheetId);
 
     try {
-      await doc.useApiKey(googleApiKey);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const googleCreds = require('../../../google-creds.json');
+      await doc.useServiceAccountAuth(googleCreds);
       await doc.loadInfo();
     } catch (err) {
+      console.log(err);
+
       this.logger.error(
         `date=${Date.now()} Cannot get Google Sheet Document by ID`,
       );
