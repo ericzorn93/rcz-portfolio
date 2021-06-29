@@ -97,14 +97,17 @@ export class GoogleApisService {
 
       if (matchingRows.length) {
         matchingRows.forEach(async row => {
+          row['Current Premium/Discount'] = stock.currentDiscount;
+          row['3  Month Z Score'] = stock.zScoreThreeMonth;
+          row['6 Month Z Score'] = stock.zScoreSixMonth;
+          row['1 Year Z Score'] = stock.zScoreOneYear;
           row['Distriubtion Frequency'] = stock.distributionFrequency;
-          console.log(row['Distriubtion Frequency']);
-
-          // TODO: Save rows
-          // await row.save();
         });
       }
     });
+
+    // TODO: Save sheet
+    await firstSheet.saveUpdatedCells();
   }
 
   /**
