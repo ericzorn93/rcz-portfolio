@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 
-import { GoogleApisService } from './services/google-apis.service';
+import { GoogleApisService } from './services/google-apis/google-apis.service';
 import { SheetsController } from './controllers/v1/sheets.controller';
+import { TdAmeritradeModule } from 'src/td-ameritrade/td-ameritrade.module';
+import { CefConnectModule } from 'src/cef-connect/cef-connect.module';
 
 @Module({
+  imports: [TdAmeritradeModule, CefConnectModule],
   providers: [GoogleApisService],
   controllers: [SheetsController],
 })

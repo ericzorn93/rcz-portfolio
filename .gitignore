@@ -35,3 +35,7 @@ lerna-debug.log*
 
 # Environment Variables
 .env
+
+# Google
+google-creds.json
+src/google-creds.json
