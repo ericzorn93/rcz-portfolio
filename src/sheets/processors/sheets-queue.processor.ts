@@ -5,12 +5,12 @@ import { Job } from 'bull';
 @Processor('googleSheetStockRows')
 export class SheetsQueueConsumer {
   @Process()
-  public async transcode(job: Job<GoogleSpreadsheetRow>): Promise<any> {
+  public async transcode(job: Job<GoogleSpreadsheetRow>): Promise<null> {
     let status = await job.getState();
     console.log(status, job.data);
     status = await job.getState();
     console.log(status);
 
-    return job.data;
+    return null;
   }
 }

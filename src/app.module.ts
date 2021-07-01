@@ -23,12 +23,6 @@ import { CefConnectModule } from './cef-connect/cef-connect.module';
           configService.get<string>('HEROKU_REDIS_PORT'),
         );
 
-        console.log({
-          redisHost,
-          redisPassword,
-          redisPort,
-        });
-
         return {
           limiter: {
             max: 10_000, /// 10000 Jobs
