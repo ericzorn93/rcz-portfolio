@@ -12,6 +12,7 @@ import { SheetsRowResponse } from '../../dto/sheets.row.response';
 import { TdAmeritradeService } from 'src/td-ameritrade/services/td-ameritrade/td-ameritrade.service';
 import { UpdatedStockResponse } from 'src/sheets/dto/updated.stock.response';
 import { CefConnectService } from 'src/cef-connect/services/cef-connect.service';
+import { SheetsQueueService } from '../sheets-queue/sheets-queue.service';
 
 type RCZPortfolioGoogleSheetRow = GoogleSpreadsheetRow & SheetsRowResponse;
 
@@ -23,6 +24,7 @@ export class GoogleApisService {
 
   constructor(
     private readonly configService: ConfigService,
+    private readonly sheetsQueueService: SheetsQueueService,
     private readonly tdAmeritradeService: TdAmeritradeService,
     private readonly cefConnectService: CefConnectService,
   ) {}
@@ -70,8 +72,11 @@ export class GoogleApisService {
     // Filter out all falsy/null values
     const nonNullStocks = finalData.filter(stock => stock != null);
 
-    // Call Google API to save new cell data
-    await this.updateSheetCellsWithNewData(nonNullStocks);
+    // Call Google API to save new row data
+    const finalRowsToSave = await this.updateSheetCellsWithNewData(
+      nonNullStocks,
+    );
+    await this.sheetsQueueService.addRowsToSaveToQueue(finalRowsToSave);
 
     return nonNullStocks.map(stock => ({
       symbol: stock.symbol,
@@ -87,10 +92,14 @@ export class GoogleApisService {
    * @param {FinalStockData[]} finalStocks
    * @memberof GoogleApisService
    */
-  private async updateSheetCellsWithNewData(finalStocks: FinalStockData[]) {
+  private async updateSheetCellsWithNewData(
+    finalStocks: FinalStockData[],
+  ): Promise<GoogleSpreadsheetRow[]> {
     const firstSheet = await this.getFirstSheet();
     const rows = await firstSheet.getRows();
-    const a1Ranges: string[] = [];
+
+    // Final updated rows
+    const rowsToSave: GoogleSpreadsheetRow[] = [];
 
     // Update each table column/row
     finalStocks.forEach(async stock => {
@@ -104,13 +113,12 @@ export class GoogleApisService {
           row['1 Year Z Score'] = stock.zScoreOneYear;
           row['Distriubtion Frequency'] = stock.distributionFrequency;
           row['Share Price'] = stock.sharePrice;
-          await row.save();
-
-          // TODO: maybe remove
-          a1Ranges.push(row.a1Range);
+          rowsToSave.push(row);
         });
       }
     });
+
+    return rowsToSave;
   }
 
   /**
