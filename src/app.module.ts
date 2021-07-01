@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { BullModule } from '@nestjs/bull';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,6 +11,42 @@ import { CefConnectModule } from './cef-connect/cef-connect.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const redisHost = configService.get<string>('HEROKU_REDIS_HOST');
+        const redisPassword = configService.get<string>(
+          'HEROKU_REDIS_PASSWORD',
+        );
+        const redisPort = Number.parseInt(
+          configService.get<string>('HEROKU_REDIS_PORT'),
+        );
+
+        console.log({
+          redisHost,
+          redisPassword,
+          redisPort,
+        });
+
+        return {
+          limiter: {
+            max: 10_000, /// 10000 Jobs
+            duration: 10_000, // 10 Seconds
+          },
+          redis: {
+            host: redisHost,
+            password: redisPassword,
+            port: redisPort,
+            tls: {
+              servername: redisHost,
+              requestCert: true,
+              rejectUnauthorized: false,
+            },
+          },
+        };
+      },
+    }),
     SheetsModule,
     TdAmeritradeModule,
     CefConnectModule,
