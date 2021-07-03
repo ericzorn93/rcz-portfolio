@@ -3,13 +3,15 @@ import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { GoogleSpreadsheetRow } from 'google-spreadsheet';
 
+import { IGoogleSheetQueueJobData } from '../../types/sheetQueue.types';
+
 @Injectable()
 export class SheetsQueueService {
   private readonly logger = new Logger('SheetsQueueService');
 
   constructor(
     @InjectQueue('googleSheetStockRows')
-    private readonly googleSheetStockRowsQueue: Queue,
+    private readonly googleSheetStockRowsQueue: Queue<IGoogleSheetQueueJobData>,
   ) {}
 
   /**
@@ -32,7 +34,10 @@ export class SheetsQueueService {
           }`,
         );
 
-        const job = await this.googleSheetStockRowsQueue.add(row.a1Range, {});
+        const job = await this.googleSheetStockRowsQueue.add({
+          a1Range: row.a1Range,
+        });
+
         this.logger.debug(
           `date=${Date.now()} added jobId=${
             job.id
