@@ -129,7 +129,7 @@ export class GoogleApisService {
    * @return {*}  {Promise<GoogleSpreadsheetWorksheet>}
    * @memberof GoogleApisService
    */
-  private async getFirstSheet(): Promise<GoogleSpreadsheetWorksheet> {
+  public async getFirstSheet(): Promise<GoogleSpreadsheetWorksheet> {
     const doc = await this.getDoc();
     const firstSheet = doc.sheetsByIndex[0];
 
@@ -183,7 +183,7 @@ export class GoogleApisService {
    * columns, and sheet metadata for a specific sheet ID that is passed in from
    * an environment variable.
    *
-   * @private
+   * @public
    * @return {Promise<GoogleSpreadsheet>}  {Promise<GoogleSpreadsheet>} Instance of the document from Google Sheets
    * @memberof GoogleApisService
    */

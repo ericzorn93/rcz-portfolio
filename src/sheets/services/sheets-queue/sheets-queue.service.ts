@@ -36,6 +36,12 @@ export class SheetsQueueService {
 
         const job = await this.googleSheetStockRowsQueue.add({
           a1Range: row.a1Range,
+          'Current Premium/Discount': row['Current Premium/Discount'],
+          '3  Month Z Score': row['3  Month Z Score'],
+          '6 Month Z Score': row['6 Month Z Score'],
+          '1 Year Z Score': row['1 Year Z Score'],
+          'Distriubtion Frequency': row['Distriubtion Frequency'],
+          'Share Price': row['Share Price'],
         });
 
         this.logger.debug(

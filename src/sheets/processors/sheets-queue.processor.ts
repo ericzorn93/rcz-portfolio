@@ -1,3 +1,4 @@
+import { GoogleSpreadsheetWorksheet } from 'google-spreadsheet';
 import {
   Processor,
   Process,
@@ -11,12 +12,24 @@ import {
 import { Job, JobId } from 'bull';
 
 import { IGoogleSheetQueueJobData } from './../types/sheetQueue.types';
+import { GoogleApisService } from '../services/google-apis/google-apis.service';
+import { OnModuleInit } from '@nestjs/common';
 
 @Processor('googleSheetStockRows')
-export class SheetsQueueConsumer {
+export class SheetsQueueConsumer implements OnModuleInit {
+  private sheet: GoogleSpreadsheetWorksheet;
+
+  constructor(private readonly googleApisService: GoogleApisService) {}
+
+  public async onModuleInit(): Promise<void> {
+    this.sheet = await this.googleApisService.getFirstSheet();
+  }
+
   @Process()
   public async transcode(job: Job<IGoogleSheetQueueJobData>): Promise<JobId> {
-    console.log(job.data);
+    // Wait one second to process
+    // await new Promise(res => setTimeout(res, 1000));
+    console.log(this.sheet.sheetId, job.data);
 
     return job.id;
   }
