@@ -197,8 +197,9 @@ export class GoogleApisService {
     const doc = new GoogleSpreadsheet(spreadsheetId);
 
     try {
+      // Fetches JSON file of Google Credentials
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const googleCreds = require('../../../google-creds.json');
+      const googleCreds = require('../../../../google-creds.json');
       await doc.useServiceAccountAuth(googleCreds);
       await doc.loadInfo();
     } catch (err) {
