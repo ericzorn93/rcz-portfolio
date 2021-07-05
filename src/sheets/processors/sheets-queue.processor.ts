@@ -46,6 +46,12 @@ export class SheetsQueueConsumer implements OnModuleInit {
     // await new Promise(res => setTimeout(res, 1500));
     const cell = await this.sheet.getCellByA1(job.data.a1Range);
     const row = this.sheetRows[cell.rowIndex];
+    row['Current Premium/Discount'] = job.data['Current Premium/Discount'];
+    row['3  Month Z Score'] = job.data['3  Month Z Score'];
+    row['6 Month Z Score'] = job.data['6 Month Z Score'];
+    row['1 Year Z Score'] = job.data['1 Year Z Score'];
+    row['Distriubtion Frequency'] = job.data['Distriubtion Frequency'];
+    row['Share Price'] = job.data['Share Price'];
 
     // Save updated row to google spreasheet
     await row.save();
@@ -61,9 +67,11 @@ export class SheetsQueueConsumer implements OnModuleInit {
   }
 
   @OnQueueActive()
-  public onActive(job: Job): void {
+  public onActive(job: Job<IGoogleSheetQueueJobData>): void {
     this.logger.log(
-      `Processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+      `Processing job ${job.id} of type ${job.name} with data ${JSON.stringify(
+        job.data,
+      )}...`,
     );
   }
 
