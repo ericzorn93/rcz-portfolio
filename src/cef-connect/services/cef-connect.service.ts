@@ -20,8 +20,8 @@ export class CefConnectService {
 	 * @memberof CefConnectService
 	 */
 	public async getClosedEndFundPricingArray(): Promise<CEFDailyPrice[]> {
-		this.logger.debug(`date=${Date.now()} Obtaining current Closed End Fund Pricing data`)
-		return this.fetchCefConnectDailyPrices()
+		this.logger.debug(`date=${Date.now()} Obtaining current Closed End Fund Pricing data`);
+		return this.fetchCefConnectDailyPrices();
 	}
 
 
