@@ -1,6 +1,7 @@
 import { Module, HttpModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { CefConnectV1Controller } from './controllers/cef-connect-v1.controller';
 import { CefConnectService } from './services/cef-connect.service';
 
 @Module({
@@ -17,6 +18,7 @@ import { CefConnectService } from './services/cef-connect.service';
       },
     }),
   ],
+  controllers: [CefConnectV1Controller],
   providers: [CefConnectService],
   exports: [CefConnectService],
 })
