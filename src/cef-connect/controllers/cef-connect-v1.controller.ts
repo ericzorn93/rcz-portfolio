@@ -1,5 +1,5 @@
 import { Controller, Get, Query, ParseFloatPipe, Logger } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import {
 	CEFDailyPrice,
@@ -25,6 +25,12 @@ export class CefConnectV1Controller {
 		return this.cefConnectService.fetchCefConnectDailyPrices();
 	}
 
+	@ApiQuery({
+		type: () => Number,
+		name: 'moneyInvested',
+		description: 'Total numeric value of money invested into closed-end fund',
+		example: 1000,
+	})
 	@ApiOkResponse({
 		type: () => CustomCEFDailyPrice,
 		isArray: true,

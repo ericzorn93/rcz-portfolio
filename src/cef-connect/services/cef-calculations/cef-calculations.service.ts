@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
+import { CEFDailyPrice } from './../../dto/cef.dailyPricing.response';
 @Injectable()
 export class CefCalculationsService {
-	public getEstimatedIncome(): number {
+	public getEstimatedIncome(fund: CEFDailyPrice): number {
+		const { DistributionRatePrice, Price } = fund;
+
 		// DistributionRatePrice - (Yield)
-		return 0;
+		return (DistributionRatePrice / 100) * Price;
 	}
 }

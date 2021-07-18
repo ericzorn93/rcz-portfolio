@@ -1,20 +1,24 @@
 import {
-	HttpService,
 	Injectable,
 	InternalServerErrorException,
 	Logger,
 } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 
 import {
 	CEFDailyPrice,
 	CustomCEFDailyPrice,
 } from './../../dto/cef.dailyPricing.response';
+import { CefCalculationsService } from './../cef-calculations/cef-calculations.service';
 
 @Injectable()
 export class CefConnectService {
 	private readonly logger = new Logger('CefConnectService');
 
-	constructor(private readonly httpService: HttpService) {}
+	constructor(
+		private readonly httpService: HttpService,
+		private readonly cefCalculationsService: CefCalculationsService,
+	) {}
 
 	/**
 	 * Makes API request to the CEF Connect Daily prices endpoint and returns an array of all closed end fund data
@@ -48,17 +52,26 @@ export class CefConnectService {
 	}
 
 	/**
-	 * Runs CEF Connect Calculations to append extra fields and return datal
+	 * Runs CEF Connect Calculations to append extra fields and return data
+	 * for each individual closed end fund
 	 *
 	 * @param {number} moneyInvested
-	 * @return {*}  {Promise<CEFDailyPrice[]>}
+	 * @return {{Promise<CEFDailyPrice[]>}}  {Promise<CEFDailyPrice[]>} Array of closed end funds with special calculations
 	 * @memberof CefConnectService
 	 */
 	public async fetchDataWithCalculations(
 		moneyInvested: number,
 	): Promise<CustomCEFDailyPrice[]> {
-		console.log(moneyInvested);
+		const cefFundData = await this.fetchCefConnectDailyPrices();
 
-		return [];
+		return cefFundData.map(fund => ({
+			...fund,
+			EstimatedIncome: this.cefCalculationsService.getEstimatedIncome(fund),
+			NumberOfSharesPerOneDollarInvested: 0,
+			AnnualIncomePerOneDollarInvested: 0,
+			AnnualIncomePerOneHundredDollarsInvested: 0,
+			MoneyInvested: moneyInvested,
+			TotalIncome: 0,
+		}));
 	}
 }

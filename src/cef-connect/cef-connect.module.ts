@@ -1,5 +1,6 @@
-import { Module, HttpModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 
 import { CefConnectV1Controller } from './controllers/cef-connect-v1.controller';
 import { CefConnectService } from './services/primary/cef-connect.service';
