@@ -67,11 +67,20 @@ export class CefConnectService {
 		return cefFundData.map(fund => ({
 			...fund,
 			EstimatedIncome: this.cefCalculationsService.getEstimatedIncome(fund),
-			NumberOfSharesPerOneDollarInvested: 0,
-			AnnualIncomePerOneDollarInvested: 0,
-			AnnualIncomePerOneHundredDollarsInvested: 0,
+			NumberOfSharesPerOneDollarInvested: this.cefCalculationsService.getNumberOfSharedPerOneDollarInvested(
+				fund,
+			),
+			AnnualIncomePerOneDollarInvested: this.cefCalculationsService.getAnnualIncomePerOneDollarInvested(
+				fund,
+			),
+			AnnualIncomePerOneHundredDollarsInvested: this.cefCalculationsService.getAnnualIncomePerOneHundredDollarsInvested(
+				fund,
+			),
 			MoneyInvested: moneyInvested,
-			TotalIncome: 0,
+			TotalIncome: this.cefCalculationsService.getTotalIncome(
+				moneyInvested,
+				fund,
+			),
 		}));
 	}
 }
