@@ -161,7 +161,7 @@ export class CEFDailyPrice {
 	AvgBondPrice: number;
 
 	@ApiProperty()
-	AvgWtdDurationNonLevAdj: null;
+	AvgWtdDurationNonLevAdj: number;
 
 	@ApiProperty()
 	EffDurationLevAdj: number;
