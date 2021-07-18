@@ -9,11 +9,11 @@ import { CefConnectService } from '../services/cef-connect.service';
 export class CefConnectV1Controller {
 	constructor(private readonly cefConnectService: CefConnectService) {}
 
-		@ApiOkResponse({
-			type: () => [CEFDailyPrice]
-		})
-    @Get('daily-prices')
-    public async cefConnectWelcome(): Promise<CEFDailyPrice[]> {
-        return this.cefConnectService.getClosedEndFundPricingArray();
-    }
+	@ApiOkResponse({
+		type: () => [CEFDailyPrice],
+	})
+	@Get('daily-prices')
+	public async cefConnectWelcome(): Promise<CEFDailyPrice[]> {
+		return this.cefConnectService.fetchCefConnectDailyPrices();
+	}
 }
