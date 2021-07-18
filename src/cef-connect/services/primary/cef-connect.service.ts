@@ -64,7 +64,7 @@ export class CefConnectService {
 	): Promise<CustomCEFDailyPrice[]> {
 		const cefFundData = await this.fetchCefConnectDailyPrices();
 
-		return cefFundData.map(fund => ({
+		const data: CustomCEFDailyPrice[] = cefFundData.map(fund => ({
 			...fund,
 			EstimatedIncome: this.cefCalculationsService.getEstimatedIncome(fund),
 			NumberOfSharesPerOneDollarInvested: this.cefCalculationsService.getNumberOfSharedPerOneDollarInvested(
@@ -81,6 +81,9 @@ export class CefConnectService {
 				moneyInvested,
 				fund,
 			),
+			CustomUpdated: new Date().toISOString(),
 		}));
+
+		return data;
 	}
 }
