@@ -1,5 +1,10 @@
 import { Controller, Get, Query, ParseFloatPipe, Logger } from '@nestjs/common';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+	ApiInternalServerErrorResponse,
+	ApiOkResponse,
+	ApiQuery,
+	ApiTags,
+} from '@nestjs/swagger';
 
 import {
 	CEFDailyPrice,
@@ -18,6 +23,7 @@ export class CefConnectV1Controller {
 		type: () => CEFDailyPrice,
 		isArray: true,
 	})
+	@ApiInternalServerErrorResponse()
 	@Get('daily-prices')
 	public async dailyPrices(): Promise<CEFDailyPrice[]> {
 		this.logger.debug(`date=${Date.now()} fetching cef connect daily prices`);
@@ -35,14 +41,35 @@ export class CefConnectV1Controller {
 		type: () => CustomCEFDailyPrice,
 		isArray: true,
 	})
+	@ApiInternalServerErrorResponse()
 	@Get('custom-daily-prices')
 	public async customDailyPrices(
-		@Query('moneyInvested', ParseFloatPipe) moneyInvested: number,
+		@Query('moneyInvested', ParseFloatPipe) moneyInvested = 1000,
+		@Query('tickerSymbols') tickerSymbols = '',
 	): Promise<CustomCEFDailyPrice[]> {
 		this.logger.debug(
 			`date=${Date.now()} fetching custom cef connect daily prices`,
 		);
 
-		return this.cefConnectService.fetchDataWithCalculations(moneyInvested);
+		return this.cefConnectService.fetchDataWithCalculations(
+			moneyInvested,
+			tickerSymbols,
+		);
+	}
+
+	@ApiOkResponse({
+		type: String,
+		isArray: true,
+		description:
+			'All Ticker Symbols from the CEF Connect Daily Pricing (All closed-end funds)',
+	})
+	@ApiInternalServerErrorResponse()
+	@Get('symbols')
+	public async getStockTickers(): Promise<string[]> {
+		this.logger.debug(
+			`date=${Date.now()} fetching all closed end fund ticker symbols`,
+		);
+
+		return this.cefConnectService.fetchCefTickers();
 	}
 }
