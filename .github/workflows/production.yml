@@ -2,8 +2,6 @@ name: Production Deploy
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
 
 jobs:
   build:
@@ -14,7 +12,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-					cache: 'yarn'
+          cache: 'yarn'
       - run: yarn --frozen-lockfile
       - run: yarn build
       # - run: yarn test
