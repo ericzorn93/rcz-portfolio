@@ -39,7 +39,7 @@ jobs:
       - run: yarn test:ci
   build:
     runs-on: ubuntu-latest
-    needs: ['install_dependencies', 'lint', 'build']
+    needs: ['install_dependencies', 'lint', 'test']
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16
