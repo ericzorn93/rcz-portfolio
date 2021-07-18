@@ -1,9 +1,9 @@
 import {
-	HttpService,
+	Injectable,
 	InternalServerErrorException,
 	Logger,
 } from '@nestjs/common';
-import { Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 
 import { TDAmeritradeStock } from '../../../td-ameritrade/dto/td-ameritrade.response';
 

@@ -61,10 +61,11 @@ export class CefConnectService {
 	 */
 	public async fetchDataWithCalculations(
 		moneyInvested: number,
+		tickerSymbols: string,
 	): Promise<CustomCEFDailyPrice[]> {
 		const cefFundData = await this.fetchCefConnectDailyPrices();
 
-		return cefFundData.map(fund => ({
+		const data: CustomCEFDailyPrice[] = cefFundData.map(fund => ({
 			...fund,
 			EstimatedIncome: this.cefCalculationsService.getEstimatedIncome(fund),
 			NumberOfSharesPerOneDollarInvested: this.cefCalculationsService.getNumberOfSharedPerOneDollarInvested(
@@ -81,6 +82,37 @@ export class CefConnectService {
 				moneyInvested,
 				fund,
 			),
+			CustomUpdated: new Date().toISOString(),
 		}));
+
+		// If NO Ticker Symbols are specified, return the original data
+		if (!tickerSymbols || tickerSymbols === '') {
+			return data;
+		}
+
+		// Split ticker symbols on comma and find all tickers that are in the parsed ticker symbols array
+		const parsedTickerSymbols = tickerSymbols
+			.split(',')
+			.map(symbol => symbol.toUpperCase());
+		return data.filter(fund => parsedTickerSymbols.includes(fund.Ticker));
+	}
+
+	/**
+	 * Fetches the daily pricing from CEF connect and returns array of
+	 * all ticker symbols for each closed end fund.
+	 *
+	 * @return {Promise<string[]>}  {Promise<string[]>}
+	 * @memberof CefConnectService
+	 */
+	public async fetchCefTickers(): Promise<string[]> {
+		const allFunds = await this.fetchCefConnectDailyPrices();
+
+		return allFunds.map(fund => {
+			this.logger.debug(
+				`date=${Date.now()} obtaining ticker symbol for cefFund=${fund.Ticker}`,
+			);
+
+			return fund.Ticker;
+		});
 	}
 }

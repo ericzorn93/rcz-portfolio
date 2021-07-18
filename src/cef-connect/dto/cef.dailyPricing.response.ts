@@ -218,6 +218,9 @@ export class CustomCEFDailyPrice extends CEFDailyPrice {
 
 	@ApiProperty()
 	TotalIncome: number;
+
+	@ApiProperty()
+	CustomUpdated: string;
 }
 
 // Used for Google Sheet
