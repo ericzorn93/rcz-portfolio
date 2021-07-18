@@ -1,4 +1,5 @@
-import { Controller, Get, Query, ParseFloatPipe, Logger } from '@nestjs/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Controller, Get, Logger, Query, ParseFloatPipe } from '@nestjs/common';
 import {
 	ApiInternalServerErrorResponse,
 	ApiOkResponse,
