@@ -1,215 +1,234 @@
-import {ApiProperty} from '@nestjs/swagger'
-
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CEFDailyPrice {
 	@ApiProperty()
-  Ticker: string;
+	Ticker: string;
 
 	@ApiProperty()
-  Discount: number;
+	Discount: number;
 
 	@ApiProperty()
-  DistributionRateNAV: number;
+	DistributionRateNAV: number;
 
 	@ApiProperty()
-  DistributionRatePrice: number;
+	DistributionRatePrice: number;
 
 	@ApiProperty()
-  DistributionAmtUSD: number;
+	DistributionAmtUSD: number;
 
 	@ApiProperty()
-  ReturnOnNAV: number;
+	ReturnOnNAV: number;
 
 	@ApiProperty()
-  CategoryId: number;
+	CategoryId: number;
 
 	@ApiProperty()
-  CategoryName: string;
+	CategoryName: string;
 
 	@ApiProperty()
-  SponsorId: number;
+	SponsorId: number;
 
 	@ApiProperty()
-  SponsorName: string;
+	SponsorName: string;
 
 	@ApiProperty()
-  IsManagedDistribution: boolean;
+	IsManagedDistribution: boolean;
 
 	@ApiProperty()
-  Price: number;
+	Price: number;
 
 	@ApiProperty()
-  PriceChange: number;
+	PriceChange: number;
 
 	@ApiProperty()
-  NAV: number;
+	NAV: number;
 
 	@ApiProperty()
-  NAVPublished: string;
+	NAVPublished: string;
 
 	@ApiProperty()
-  Cusip: string;
+	Cusip: string;
 
 	@ApiProperty()
-  Name: string;
+	Name: string;
 
 	@ApiProperty()
-  LastUpdated: string;
+	LastUpdated: string;
 
 	@ApiProperty()
-  NavTicker: string;
+	NavTicker: string;
 
 	@ApiProperty()
-  Strategy: string;
+	Strategy: string;
 
 	@ApiProperty()
-  LeverageRatioPercentage: number;
+	LeverageRatioPercentage: number;
 
 	@ApiProperty()
-  MarketCapUSDm: number;
+	MarketCapUSDm: number;
 
 	@ApiProperty()
-  UNIIPerShare: number;
+	UNIIPerShare: number;
 
 	@ApiProperty()
-  DistributionFrequency: string;
+	DistributionFrequency: string;
 
 	@ApiProperty()
-  EarningsPerShare: number;
+	EarningsPerShare: number;
 
 	@ApiProperty()
-  CurrentDistribution: number;
+	CurrentDistribution: number;
 
 	@ApiProperty()
-  InceptionPrice: number;
+	InceptionPrice: number;
 
 	@ApiProperty()
-  AverageCoupon: number;
+	AverageCoupon: number;
 
 	@ApiProperty()
-  AMTPercentage: number;
+	AMTPercentage: number;
 
 	@ApiProperty()
-  AverageWeightedMaturity: number;
+	AverageWeightedMaturity: number;
 
 	@ApiProperty()
-  ExpenseRatio: number;
+	ExpenseRatio: number;
 
 	@ApiProperty()
-  BaselineExpense: any;
+	BaselineExpense: any;
 
 	@ApiProperty()
-  TotalAssetsUSDm: number;
+	TotalAssetsUSDm: number;
 
 	@ApiProperty()
-  IsLeveraged: boolean;
+	IsLeveraged: boolean;
 
 	@ApiProperty()
-  IsPriceBelow52WkAvg: boolean;
+	IsPriceBelow52WkAvg: boolean;
 
 	@ApiProperty()
-  IsDiscountBelow52WkAvg: boolean;
+	IsDiscountBelow52WkAvg: boolean;
 
 	@ApiProperty()
-  IsAMTPct: boolean;
+	IsAMTPct: boolean;
 
 	@ApiProperty()
-  IsManaged: boolean;
+	IsManaged: boolean;
 
 	@ApiProperty()
-  Term: boolean;
+	Term: boolean;
 
 	@ApiProperty()
-  AvgWtdDurationLevAdj: number;
+	AvgWtdDurationLevAdj: number;
 
 	@ApiProperty()
-  Yr3RetOnNav: number;
+	Yr3RetOnNav: number;
 
 	@ApiProperty()
-  Yr3RetOnPrice: number;
+	Yr3RetOnPrice: number;
 
 	@ApiProperty()
-  Yr5RetOnNav: number;
+	Yr5RetOnNav: number;
 
 	@ApiProperty()
-  Yr5RetOnPrice: number;
+	Yr5RetOnPrice: number;
 
 	@ApiProperty()
-  YTDRetOnNav: number;
+	YTDRetOnNav: number;
 
 	@ApiProperty()
-  YTDRetOnPrice: number;
+	YTDRetOnPrice: number;
 
 	@ApiProperty()
-  SinceInceptionRetOnNav: number;
+	SinceInceptionRetOnNav: number;
 
 	@ApiProperty()
-  SinceInceptionRetOnPrice: number;
+	SinceInceptionRetOnPrice: number;
 
 	@ApiProperty()
-  ReturnOnPrice: number;
+	ReturnOnPrice: number;
 
 	@ApiProperty()
-  AvgDailyVolume: number;
+	AvgDailyVolume: number;
 
 	@ApiProperty()
-  CallableYr1Pct: number;
+	CallableYr1Pct: number;
 
 	@ApiProperty()
-  PrerefundedPercentage: number;
+	PrerefundedPercentage: number;
 
 	@ApiProperty()
-  AvgBondPrice: number;
+	AvgBondPrice: number;
 
 	@ApiProperty()
-  AvgWtdDurationNonLevAdj: null;
+	AvgWtdDurationNonLevAdj: null;
 
 	@ApiProperty()
-  EffDurationLevAdj: number;
+	EffDurationLevAdj: number;
 
 	@ApiProperty()
-  EffDurationNonLevAdj: number;
+	EffDurationNonLevAdj: number;
 
 	@ApiProperty()
-  Price52WkAvg: number;
+	Price52WkAvg: number;
 
 	@ApiProperty()
-  Discount52WkAvg: number;
+	Discount52WkAvg: number;
 
 	@ApiProperty()
-  ZScore1Yr: number;
+	ZScore1Yr: number;
 
 	@ApiProperty()
-  ZScore3M: number;
+	ZScore3M: number;
 
 	@ApiProperty()
-  ZScore6M: number;
+	ZScore6M: number;
 
 	@ApiProperty()
-  ZScoreDate: string;
+	ZScoreDate: string;
 
 	@ApiProperty()
-  InceptionDate: string;
+	InceptionDate: string;
 
 	@ApiProperty()
-  InceptionDateString: string;
+	InceptionDateString: string;
 
 	@ApiProperty()
-  InceptionDateUnixTimestamp: number;
+	InceptionDateUnixTimestamp: number;
 
 	@ApiProperty()
-  DistributionDate: string;
+	DistributionDate: string;
+}
+
+export class CustomCEFDailyPrice extends CEFDailyPrice {
+	@ApiProperty()
+	EstimatedIncome: number;
+
+	@ApiProperty()
+	NumberOfSharesPerOneDollarInvested: number;
+
+	@ApiProperty()
+	AnnualIncomePerOneDollarInvested: number;
+
+	@ApiProperty()
+	AnnualIncomePerOneHundredDollarsInvested: number;
+
+	@ApiProperty()
+	MoneyInvested: number;
+
+	@ApiProperty()
+	TotalIncome: number;
 }
 
 // Used for Google Sheet
 export interface CEFConnectSheetData {
-  cefSharePrice: string | null;
-  currentDiscount: string | null;
-  fiftyTwoWeekLowDiscount: string | null;
-  fiftyTwoWeekHighDiscount: string | null;
-  fiftyTwoWeekAverageDiscount: string | null;
-  zScoreThreeMonth: number | null;
-  zScoreSixMonth: number | null;
-  zScoreOneYear: number | null;
-  distributionFrequency: string | null;
+	cefSharePrice: string | null;
+	currentDiscount: string | null;
+	fiftyTwoWeekLowDiscount: string | null;
+	fiftyTwoWeekHighDiscount: string | null;
+	fiftyTwoWeekAverageDiscount: string | null;
+	zScoreThreeMonth: number | null;
+	zScoreSixMonth: number | null;
+	zScoreOneYear: number | null;
+	distributionFrequency: string | null;
 }
