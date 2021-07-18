@@ -37,6 +37,13 @@ export class CefConnectV1Controller {
 		description: 'Total numeric value of money invested into closed-end fund',
 		example: 1000,
 	})
+	@ApiQuery({
+		type: () => String,
+		name: 'tickerSymbols',
+		description:
+			'All ticker symbols that are separated by commas (ex. ABC,DEF,GHI) to obtain CEF data for',
+		required: false,
+	})
 	@ApiOkResponse({
 		type: () => CustomCEFDailyPrice,
 		isArray: true,
