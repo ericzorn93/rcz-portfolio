@@ -1,25 +1,27 @@
-import { Module, HttpModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 
 import { CefConnectV1Controller } from './controllers/cef-connect-v1.controller';
-import { CefConnectService } from './services/cef-connect.service';
+import { CefConnectService } from './services/primary/cef-connect.service';
+import { CefCalculationsService } from './services/cef-calculations/cef-calculations.service';
 
 @Module({
-  imports: [
-    HttpModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const baseURL = configService.get<string>('CEF_CONNECT_BASE_URL');
+	imports: [
+		HttpModule.registerAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: (configService: ConfigService) => {
+				const baseURL = configService.get<string>('CEF_CONNECT_BASE_URL');
 
-        return {
-          baseURL,
-        };
-      },
-    }),
-  ],
-  controllers: [CefConnectV1Controller],
-  providers: [CefConnectService],
-  exports: [CefConnectService],
+				return {
+					baseURL,
+				};
+			},
+		}),
+	],
+	controllers: [CefConnectV1Controller],
+	providers: [CefConnectService, CefCalculationsService],
+	exports: [CefConnectService],
 })
 export class CefConnectModule {}
