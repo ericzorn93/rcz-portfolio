@@ -96,6 +96,7 @@ export class CefConnectService {
 		const parsedTickerSymbols = tickerSymbols
 			.split(',')
 			.map(symbol => symbol.toUpperCase());
+
 		return data.filter(fund => parsedTickerSymbols.includes(fund.Ticker));
 	}
 
