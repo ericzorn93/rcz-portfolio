@@ -1,0 +1,10 @@
+{ 
+  "version": 2, 
+  "name": "rcz-portfolio", 
+  "builds": [
+    { "src": "dist/main.js", "use": "@now/node" }
+   ],
+  "routes": [
+    { "src": "/(.*)", "dest": "dist/main.js" }
+   ]
+}
