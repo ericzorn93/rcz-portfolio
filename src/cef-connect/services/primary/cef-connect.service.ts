@@ -67,6 +67,7 @@ export class CefConnectService {
 	): Promise<CustomCEFDailyPrice[]> {
 		const cefFundData = await this.fetchCefConnectDailyPrices();
 
+		// Append custom calculations onto each fund and ticker symbol
 		const data: CustomCEFDailyPrice[] = cefFundData.map(fund => ({
 			...fund,
 			EstimatedIncome: this.cefCalculationsService.getEstimatedIncome(fund),
