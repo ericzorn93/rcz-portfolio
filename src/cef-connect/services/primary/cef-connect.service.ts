@@ -42,6 +42,8 @@ export class CefConnectService {
 
 			return dailyPrices;
 		} catch (err) {
+			this.logger.error(err);
+
 			this.logger.error(
 				`date=${Date.now()} Having trouble fetching CEF Connect daily prices`,
 			);
