@@ -42,7 +42,7 @@ export class CefConnectV1Controller {
 		type: () => String,
 		name: 'tickerSymbols',
 		description:
-			'All ticker symbols that are separated by commas (ex. ABC,DEF,GHI) to obtain CEF data for',
+			'All ticker symbols that are separated by commas (ex. ABC,DEF,GHI) to obtain CEF data for each requested ticker symbol',
 		required: false,
 	})
 	@ApiOkResponse({
