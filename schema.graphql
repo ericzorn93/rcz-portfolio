@@ -170,5 +170,7 @@ type Query {
     """
     input: CEFCustomDailyPriceInput
   ): [CustomCEFDailyPrice!]!
+
+  """Default CEF Connect ticker symbol values for the current date and time"""
   cefConnectDailyPrices: [CEFDailyPrice!]!
 }

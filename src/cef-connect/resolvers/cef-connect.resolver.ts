@@ -14,7 +14,10 @@ export class CefConnectResolver {
 
 	constructor(private readonly cefConnectService: CefConnectService) {}
 
-	@Query(() => [CEFDailyPrice])
+	@Query(() => [CEFDailyPrice], {
+		description:
+			'Default CEF Connect ticker symbol values for the current date and time',
+	})
 	public cefConnectDailyPrices(): Promise<CEFDailyPrice[]> {
 		this.logger.debug(`date=${Date.now()} fetching cef connect daily prices`);
 
