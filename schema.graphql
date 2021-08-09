@@ -1,0 +1,176 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CEFCustomDailyPriceInput {
+  """
+  Money invested applies to the dollar amount invested for all requested ticker symbols from CEF Connect
+  """
+  moneyInvested: Float = 1000
+
+  """
+  CSV formatted ticker symbols (ABC,DEF,GHI) that will be parsed for obtaining custom CEF Connect data and calculations
+  """
+  tickerSymbols: String = ""
+}
+
+"""Original CEF Daily Price from CEF Connect API"""
+type CEFDailyPrice {
+  AMTPercentage: Float
+  AverageCoupon: Float
+  AverageWeightedMaturity: Float
+  AvgBondPrice: Float
+  AvgDailyVolume: Float
+  AvgWtdDurationLevAdj: Float
+  AvgWtdDurationNonLevAdj: Float
+  BaselineExpense: Float
+  CallableYr1Pct: Float
+  CategoryId: Float
+  CategoryName: String
+  CurrentDistribution: Float
+  Cusip: String
+  Discount: Float
+  Discount52WkAvg: Float
+  DistributionAmtUSD: Float
+  DistributionDate: String
+  DistributionFrequency: String
+  DistributionRateNAV: Float
+  DistributionRatePrice: Float
+  EarningsPerShare: Float
+  EffDurationLevAdj: Float
+  EffDurationNonLevAdj: Float
+  ExpenseRatio: Float
+  InceptionDate: String
+  InceptionDateString: String
+  InceptionDateUnixTimestamp: Float
+  InceptionPrice: Float
+  IsAMTPct: Boolean
+  IsDiscountBelow52WkAvg: Boolean
+  IsLeveraged: Boolean
+  IsManaged: Boolean
+  IsManagedDistribution: Boolean
+  IsPriceBelow52WkAvg: Boolean
+  LastUpdated: String
+  LeverageRatioPercentage: Float
+  MarketCapUSDm: Float
+  NAV: Float
+  NAVPublished: String
+  Name: String
+  NavTicker: String
+  PrerefundedPercentage: Float
+  Price: Float
+  Price52WkAvg: Float
+  PriceChange: Float
+  ReturnOnNAV: Float
+  ReturnOnPrice: Float
+  SinceInceptionRetOnNav: Float
+  SinceInceptionRetOnPrice: Float
+  SponsorId: Float
+  SponsorName: String
+  Strategy: String
+  Term: Boolean
+  Ticker: String!
+  TotalAssetsUSDm: Float
+  UNIIPerShare: Float
+  YTDRetOnNav: Float
+  YTDRetOnPrice: Float
+  Yr3RetOnNav: Float
+  Yr3RetOnPrice: Float
+  Yr5RetOnNav: Float
+  Yr5RetOnPrice: Float
+  ZScore1Yr: Float
+  ZScore3M: Float
+  ZScore6M: Float
+  ZScoreDate: String
+}
+
+"""
+Custom calculations applied to select CEF Connect data for optimal investment insight
+"""
+type CustomCEFDailyPrice {
+  AMTPercentage: Float
+  AnnualIncomePerOneDollarInvested: Float
+  AnnualIncomePerOneHundredDollarsInvested: Float
+  AverageCoupon: Float
+  AverageWeightedMaturity: Float
+  AvgBondPrice: Float
+  AvgDailyVolume: Float
+  AvgWtdDurationLevAdj: Float
+  AvgWtdDurationNonLevAdj: Float
+  BaselineExpense: Float
+  CallableYr1Pct: Float
+  CategoryId: Float
+  CategoryName: String
+  CurrentDistribution: Float
+  Cusip: String
+  CustomUpdated: String
+  Discount: Float
+  Discount52WkAvg: Float
+  DistributionAmtUSD: Float
+  DistributionDate: String
+  DistributionFrequency: String
+  DistributionRateNAV: Float
+  DistributionRatePrice: Float
+  EarningsPerShare: Float
+  EffDurationLevAdj: Float
+  EffDurationNonLevAdj: Float
+  EstimatedIncome: Float
+  ExpenseRatio: Float
+  InceptionDate: String
+  InceptionDateString: String
+  InceptionDateUnixTimestamp: Float
+  InceptionPrice: Float
+  IsAMTPct: Boolean
+  IsDiscountBelow52WkAvg: Boolean
+  IsLeveraged: Boolean
+  IsManaged: Boolean
+  IsManagedDistribution: Boolean
+  IsPriceBelow52WkAvg: Boolean
+  LastUpdated: String
+  LeverageRatioPercentage: Float
+  MarketCapUSDm: Float
+  MoneyInvested: Float
+  NAV: Float
+  NAVPublished: String
+  Name: String
+  NavTicker: String
+  NumberOfSharesPerOneDollarInvested: Float
+  PrerefundedPercentage: Float
+  Price: Float
+  Price52WkAvg: Float
+  PriceChange: Float
+  ReturnOnNAV: Float
+  ReturnOnPrice: Float
+  SinceInceptionRetOnNav: Float
+  SinceInceptionRetOnPrice: Float
+  SponsorId: Float
+  SponsorName: String
+  Strategy: String
+  Term: Boolean
+  Ticker: String!
+  TotalAssetsUSDm: Float
+  TotalIncome: Float
+  UNIIPerShare: Float
+  YTDRetOnNav: Float
+  YTDRetOnPrice: Float
+  Yr3RetOnNav: Float
+  Yr3RetOnPrice: Float
+  Yr5RetOnNav: Float
+  Yr5RetOnPrice: Float
+  ZScore1Yr: Float
+  ZScore3M: Float
+  ZScore6M: Float
+  ZScoreDate: String
+}
+
+type Query {
+  cefConnectCustomDailyPrices(
+    """
+    Accepts the requested money invested and ticker symbols requested from CEF Connect data
+    """
+    input: CEFCustomDailyPriceInput
+  ): [CustomCEFDailyPrice!]!
+
+  """Default CEF Connect ticker symbol values for the current date and time"""
+  cefConnectDailyPrices: [CEFDailyPrice!]!
+}
