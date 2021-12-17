@@ -85,6 +85,7 @@ export class CefCalculationsService {
 
 		const calculated =
 			(moneyInvested / 100) * annualIncomePerOneHundredDollarsInvested;
+
 		return this.useDecimalPlaces(calculated);
 	}
 

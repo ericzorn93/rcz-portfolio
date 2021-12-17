@@ -34,6 +34,7 @@ export class CefConnectService {
 			const { data: dailyPrices } = await this.httpService
 				.get<CEFDailyPrice[]>(`/DailyPricing?&_=${timeStart}`)
 				.toPromise();
+
 			const timeElapsed = Date.now() - timeStart;
 
 			this.logger.debug(
