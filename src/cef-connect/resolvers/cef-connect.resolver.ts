@@ -31,7 +31,7 @@ export class CefConnectResolver {
 			description:
 				'Accepts the requested money invested and ticker symbols requested from CEF Connect data',
 		})
-		{ moneyInvested = 1000, tickerSymbols = '' }: CEFCustomDailyPriceInput,
+		{ moneyInvested, tickerSymbols }: CEFCustomDailyPriceInput,
 	): Promise<CustomCEFDailyPrice[]> {
 		this.logger.debug(
 			`date=${Date.now()} fetching custom cef connect daily prices`,
