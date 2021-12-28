@@ -69,29 +69,31 @@ export class CefConnectService {
 		const cefFundData = await this.fetchCefConnectDailyPrices();
 
 		// Append custom calculations onto each fund and ticker symbol
-		const data: CustomCEFDailyPrice[] = cefFundData.map(fund => ({
-			...fund,
-			EstimatedIncome: this.cefCalculationsService.getEstimatedIncome(fund),
-			NumberOfSharesPerOneDollarInvested: this.cefCalculationsService.getNumberOfSharedPerOneDollarInvested(
-				fund,
-			),
-			AnnualIncomePerOneDollarInvested: this.cefCalculationsService.getAnnualIncomePerOneDollarInvested(
-				fund,
-			),
-			AnnualIncomePerOneHundredDollarsInvested: this.cefCalculationsService.getAnnualIncomePerOneHundredDollarsInvested(
-				fund,
-			),
-			MoneyInvested: moneyInvested,
-			TotalIncome: this.cefCalculationsService.getTotalIncome(
-				moneyInvested,
-				fund,
-			),
-			CustomUpdated: new Date().toISOString(),
-		}));
+		const mergedCustomDailyPrices: CustomCEFDailyPrice[] = cefFundData.map(
+			fund => ({
+				...fund,
+				EstimatedIncome: this.cefCalculationsService.getEstimatedIncome(fund),
+				NumberOfSharesPerOneDollarInvested: this.cefCalculationsService.getNumberOfSharedPerOneDollarInvested(
+					fund,
+				),
+				AnnualIncomePerOneDollarInvested: this.cefCalculationsService.getAnnualIncomePerOneDollarInvested(
+					fund,
+				),
+				AnnualIncomePerOneHundredDollarsInvested: this.cefCalculationsService.getAnnualIncomePerOneHundredDollarsInvested(
+					fund,
+				),
+				MoneyInvested: moneyInvested,
+				TotalIncome: this.cefCalculationsService.getTotalIncome(
+					moneyInvested,
+					fund,
+				),
+				CustomUpdated: new Date().toISOString(),
+			}),
+		);
 
 		// If NO Ticker Symbols are specified, return the original data
 		if (!tickerSymbols || tickerSymbols === '') {
-			return data;
+			return mergedCustomDailyPrices;
 		}
 
 		// Split ticker symbols on comma and find all tickers that are in the parsed ticker symbols array
@@ -99,7 +101,9 @@ export class CefConnectService {
 			.split(',')
 			.map(symbol => symbol.toUpperCase());
 
-		return data.filter(fund => parsedTickerSymbols.includes(fund.Ticker));
+		return mergedCustomDailyPrices.filter(fund =>
+			parsedTickerSymbols.includes(fund.Ticker),
+		);
 	}
 
 	/**
