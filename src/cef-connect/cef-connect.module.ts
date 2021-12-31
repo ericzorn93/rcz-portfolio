@@ -6,6 +6,7 @@ import { CefConnectV1Controller } from './controllers/cef-connect-v1.controller'
 import { CefConnectService } from './services/primary/cef-connect.service';
 import { CefCalculationsService } from './services/cef-calculations/cef-calculations.service';
 import { CefConnectResolver } from './resolvers/cef-connect.resolver';
+import { CefConnectGateway } from './gateways/cef-connect.gateway';
 
 @Module({
 	imports: [
@@ -22,7 +23,12 @@ import { CefConnectResolver } from './resolvers/cef-connect.resolver';
 		}),
 	],
 	controllers: [CefConnectV1Controller],
-	providers: [CefConnectService, CefCalculationsService, CefConnectResolver],
+	providers: [
+		CefConnectService,
+		CefCalculationsService,
+		CefConnectResolver,
+		CefConnectGateway,
+	],
 	exports: [CefConnectService],
 })
 export class CefConnectModule {}
