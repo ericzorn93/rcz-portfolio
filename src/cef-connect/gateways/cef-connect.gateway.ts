@@ -3,14 +3,18 @@ import {
 	OnGatewayConnection,
 	SubscribeMessage,
 	WebSocketGateway,
+	WebSocketServer,
 	WsResponse,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({ namespace: 'cef-connect' })
 export class CefConnectGateway implements OnGatewayConnection {
+	@WebSocketServer()
+	private readonly server: Server;
+
 	public handleConnection(client: Socket): void {
-		console.log(client.id);
+		console.log(client.id, this.server);
 	}
 
 	@SubscribeMessage('hello')
