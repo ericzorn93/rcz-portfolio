@@ -14,7 +14,10 @@ export class CefConnectGateway implements OnGatewayConnection {
 	}
 
 	@SubscribeMessage('hello')
-	public getMessage(@ConnectedSocket() _client: Socket): WsResponse<string> {
+	public getMessage(
+		@ConnectedSocket() _client: Socket,
+		_data: any,
+	): WsResponse<string> {
 		const test: WsResponse<string> = {
 			event: 'hello',
 			data: 'hello',

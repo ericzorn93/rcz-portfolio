@@ -2,6 +2,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 
@@ -18,6 +19,9 @@ async function bootstrap() {
 
 	// Static Files
 	app.useStaticAssets(join(__dirname, '..', 'public'));
+
+	// Global Middleware
+	app.use(cookieParser());
 
 	// Swagger/OpenAPI Documentation and write swagger spec on startup
 	const config = new DocumentBuilder()
