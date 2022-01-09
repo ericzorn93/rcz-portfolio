@@ -11,6 +11,9 @@ import { AppModule } from './app.module';
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+	// Allow microservice start from NestJS over TCP
+	await app.startAllMicroservices();
+
 	// Global Middleware
 	app.enableCors();
 
