@@ -1,4 +1,5 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -10,6 +11,8 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
+	const configService = await app.get(ConfigService);
+	const isDev = configService.get('NODE_ENV') !== 'production';
 
 	// Allow microservice start from NestJS over TCP
 	await app.startAllMicroservices();
@@ -27,24 +30,29 @@ async function bootstrap() {
 	app.use(cookieParser());
 
 	// Swagger/OpenAPI Documentation and write swagger spec on startup
-	const config = new DocumentBuilder()
-		.setTitle('RCZ Portfolio Spreadsheet API')
-		.setDescription(
-			'A REST and GraphQL API that interacts with the RCZ Portfolio Google Sheet to pull in latest stock and closed-end fund data.',
-		)
-		.setVersion('1.0')
-		.build();
-	const document = SwaggerModule.createDocument(app, config);
-	try {
-		writeFileSync('./public/docs/swagger-spec.json', JSON.stringify(document));
-	} catch (err) {
-		console.log(err);
+	if (isDev) {
+		const config = new DocumentBuilder()
+			.setTitle('RCZ Portfolio Spreadsheet API')
+			.setDescription(
+				'A REST and GraphQL API that interacts with the RCZ Portfolio Google Sheet to pull in latest stock and closed-end fund data.',
+			)
+			.setVersion('1.0')
+			.build();
+		const document = SwaggerModule.createDocument(app, config);
+		try {
+			writeFileSync(
+				'./public/docs/swagger-spec.json',
+				JSON.stringify(document),
+			);
+		} catch (err) {
+			console.log(err);
 
-		Logger.error(
-			`date=${Date.now()} Had trouble outputting schema to JSON file`,
-		);
+			Logger.error(
+				`date=${Date.now()} Had trouble outputting schema to JSON file`,
+			);
+		}
+		SwaggerModule.setup('api-docs', app, document);
 	}
-	SwaggerModule.setup('api-docs', app, document);
 
 	// Start Server
 	const PORT = process.env.PORT ?? 8080;
